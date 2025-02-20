@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 
 public class ProdutosDAO {
 
+    // Método para cadastrar um novo produto no banco de dados
     public boolean cadastrarProduto(ProdutosDTO produto) {
         Connection conn = Conexao.conectar(); 
         if (conn == null) {
@@ -34,7 +35,7 @@ public class ProdutosDAO {
             prep.setString(3, produto.getStatus());
 
             int linhasAfetadas = prep.executeUpdate();
-            return linhasAfetadas > 0; // 
+            return linhasAfetadas > 0;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "❌ Erro ao cadastrar produto: " + e.getMessage());
             return false;
@@ -48,6 +49,7 @@ public class ProdutosDAO {
         }
     }
 
+    // Método para listar todos os produtos cadastrados
     public ArrayList<ProdutosDTO> listarProdutos() {
         Connection conn = Conexao.conectar();
         if (conn == null) {
@@ -84,5 +86,35 @@ public class ProdutosDAO {
             }
         }
         return listagem;
+    }
+
+    // Método para vender um produto (atualizar status para "Vendido")
+    public boolean venderProduto(int idProduto) {
+        Connection conn = Conexao.conectar();
+        if (conn == null) {
+            JOptionPane.showMessageDialog(null, "Erro ao conectar ao banco de dados!");
+            return false;
+        }
+
+        String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
+        PreparedStatement prep = null;
+
+        try {
+            prep = conn.prepareStatement(sql);
+            prep.setInt(1, idProduto);
+
+            int linhasAtualizadas = prep.executeUpdate();
+            return linhasAtualizadas > 0; // Retorna true se a atualização foi bem-sucedida
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "❌ Erro ao vender produto: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                if (prep != null) prep.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "⚠️ Erro ao fechar a conexão: " + e.getMessage());
+            }
+        }
     }
 }

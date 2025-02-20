@@ -117,4 +117,44 @@ public class ProdutosDAO {
             }
         }
     }
+
+    // Método para listar apenas os produtos que foram vendidos
+    public ArrayList<ProdutosDTO> listarProdutosVendidos() {
+        Connection conn = Conexao.conectar();
+        if (conn == null) {
+            JOptionPane.showMessageDialog(null, "Erro ao conectar ao banco de dados!");
+            return new ArrayList<>();
+        }
+
+        String sql = "SELECT * FROM produtos WHERE status = 'Vendido'";
+        PreparedStatement prep = null;
+        ResultSet resultSet = null;
+        ArrayList<ProdutosDTO> listaVendidos = new ArrayList<>();
+
+        try {
+            prep = conn.prepareStatement(sql);
+            resultSet = prep.executeQuery();
+
+            while (resultSet.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                produto.setId(resultSet.getInt("id"));
+                produto.setNome(resultSet.getString("nome"));
+                produto.setValor(resultSet.getInt("valor"));
+                produto.setStatus(resultSet.getString("status"));
+                listaVendidos.add(produto);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "❌ Erro ao listar produtos vendidos: " + e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) resultSet.close();
+                if (prep != null) prep.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "⚠️ Erro ao fechar a conexão: " + e.getMessage());
+            }
+        }
+        return listaVendidos;
+    }
 }
+

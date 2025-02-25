@@ -1,13 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
-
-
-/**
- *
- * @author Fernando
- */
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 
@@ -18,22 +8,6 @@ public class vendasVIEW extends javax.swing.JFrame {
         listarProdutosVendidos(); // Carrega os produtos vendidos ao abrir a tela
     }
 
-    private void listarProdutosVendidos() {
-        ProdutosDAO dao = new ProdutosDAO();
-        ArrayList<ProdutosDTO> lista = dao.listarProdutosVendidos();
-
-        DefaultTableModel model = (DefaultTableModel) tblVendidos.getModel();
-        model.setRowCount(0); // Limpa a tabela antes de preencher
-
-        for (ProdutosDTO produto : lista) {
-            model.addRow(new Object[]{
-                produto.getId(),
-                produto.getNome(),
-                produto.getValor(),
-                produto.getStatus()
-            });
-        }
-    }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -55,7 +29,7 @@ public class vendasVIEW extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "ID", "Nome", "Valor", "Status"
             }
         ));
         jScrollPane1.setViewportView(tblVendidos);
@@ -104,43 +78,37 @@ public class vendasVIEW extends javax.swing.JFrame {
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
        this.dispose(); // Fecha a tela de vendas
-    }                                          
+                                              
     }//GEN-LAST:event_btnVoltarActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(vendasVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(vendasVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(vendasVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(vendasVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+public static void main(String args[]) {
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            new vendasVIEW().setVisible(true);
         }
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new vendasVIEW().setVisible(true);
-            }
-        });
-    }
-
+    });
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVoltar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblVendidos;
     // End of variables declaration//GEN-END:variables
+private void listarProdutosVendidos() {
+    ProdutosDAO dao = new ProdutosDAO();
+    ArrayList<ProdutosDTO> lista = dao.listarProdutosVendidos();
+
+    DefaultTableModel model = (DefaultTableModel) tblVendidos.getModel();
+    model.setRowCount(0); // Limpa a tabela antes de preencher
+
+    for (ProdutosDTO produto : lista) {
+        model.addRow(new Object[]{
+            produto.getId(),
+            produto.getNome(),
+            produto.getValor(),
+            produto.getStatus()
+        });
+    }
 }
+}
+    
+

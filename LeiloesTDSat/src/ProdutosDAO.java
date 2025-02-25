@@ -89,34 +89,34 @@ public class ProdutosDAO {
     }
 
     // Método para vender um produto (atualizar status para "Vendido")
-    public boolean venderProduto(int idProduto) {
-        Connection conn = Conexao.conectar();
-        if (conn == null) {
-            JOptionPane.showMessageDialog(null, "Erro ao conectar ao banco de dados!");
-            return false;
-        }
+   public boolean venderProduto(int idProduto) {
+    Connection conn = Conexao.conectar();
+    if (conn == null) {
+        JOptionPane.showMessageDialog(null, "Erro ao conectar ao banco de dados!");
+        return false;
+    }
 
-        String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ?";
-        PreparedStatement prep = null;
+    String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ? AND status = 'A Venda'";
+    PreparedStatement prep = null;
 
+    try {
+        prep = conn.prepareStatement(sql);
+        prep.setInt(1, idProduto);
+
+        int linhasAtualizadas = prep.executeUpdate();
+        return linhasAtualizadas > 0; // Retorna true se a atualização foi bem-sucedida
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "❌ Erro ao vender produto: " + e.getMessage());
+        return false;
+    } finally {
         try {
-            prep = conn.prepareStatement(sql);
-            prep.setInt(1, idProduto);
-
-            int linhasAtualizadas = prep.executeUpdate();
-            return linhasAtualizadas > 0; // Retorna true se a atualização foi bem-sucedida
+            if (prep != null) prep.close();
+            if (conn != null) conn.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "❌ Erro ao vender produto: " + e.getMessage());
-            return false;
-        } finally {
-            try {
-                if (prep != null) prep.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "⚠️ Erro ao fechar a conexão: " + e.getMessage());
-            }
+            JOptionPane.showMessageDialog(null, "⚠️ Erro ao fechar a conexão: " + e.getMessage());
         }
     }
+}
 
     // Método para listar apenas os produtos que foram vendidos
     public ArrayList<ProdutosDTO> listarProdutosVendidos() {
